@@ -250,6 +250,32 @@
     .catch(e => console.log('❌ Sheet Error', e));
   }
 
+  // --- NEW: DIRECT EMAIL VIA FORMSUBMIT (Client Side) ---
+  async function sendToEmail(order) {
+    const adminEmail = 'sajjplace@gmail.com';
+    const data = {
+      _subject: `New Order ${order.id} - ₦${Number(order.total).toFixed(2)}`,
+      _template: 'table',
+      Order_ID: order.id,
+      Date: new Date(order.date).toLocaleString(),
+      Customer_Name: order.customer.name,
+      Customer_Email: order.customer.email,
+      Customer_Phone: order.customer.phone,
+      Address: order.customer.address,
+      Items: (order.items || []).map(i => `${i.qty}x ${i.name}`).join(', '),
+      Total: `₦${Number(order.total).toFixed(2)}`,
+      Payment_Method: order.payment ? order.payment.method : 'N/A',
+      Notes: order.notes || ''
+    };
+    try {
+      await fetch(`https://formsubmit.co/ajax/${adminEmail}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(data)
+      });
+    } catch(e) { console.log('Email send failed', e); }
+  }
+
   // --- UPDATED PLACE ORDER WITH EXCEL SYNC ---
   async function placeOrder(data, payment){
     const cart = loadCart();
@@ -291,6 +317,7 @@
 
     sendOrderToServer(order).catch(()=>{});
     await sendToGoogleSheet(order);
+    await sendToEmail(order); // Send email directly from browser
     localStorage.setItem('cart:items', JSON.stringify([]));
     try{ window.dispatchEvent(new Event('storage')); }catch(e){}
     window.location.href = 'thankyou.html?order=' + encodeURIComponent(orderId);

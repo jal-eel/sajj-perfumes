@@ -40,75 +40,16 @@ function requireAdmin(req, res, next){
   res.set('WWW-Authenticate', 'Basic realm="SAJJ Admin"'); return res.status(401).end();
 }
 
-  // Simple email via FormSubmit (No SMTP/Password needed)
-  const adminEmail = process.env.ADMIN_EMAIL || 'sajjplace@gmail.com';
-  
-  const payload = {
-    _subject: `New Order ${order.id} - ₦${Number(order.total).toFixed(2)}`,
-    _template: 'table',
-    Order_ID: order.id,
-    Date: new Date(order.date).toLocaleString(),
-    Customer_Name: order.customer.name,
-    Customer_Email: order.customer.email,
-    Customer_Phone: order.customer.phone,
-    Address: order.customer.address,
-    Items: (order.items || []).map(i => `${i.qty}x ${i.name}`).join(', '),
-    Total: `₦${Number(order.total).toFixed(2)}`,
-    Payment_Method: order.payment ? order.payment.method : 'N/A',
-    Notes: order.notes || ''
-  };
-
-  if (fetch) {
-    fetch(`https://formsubmit.co/ajax/${adminEmail}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify(payload)
-    })
-    .then(() => console.log('Order email sent via FormSubmit'))
-    .catch(e => console.error('Failed to send email', e));
-  }
+  // Email is now handled client-side in cart.js to ensure delivery
+  // We just log it here for server records
+  console.log(`Order ${order.id} received on server.`);
+}
 
 
 // Tickets/email & WhatsApp notification
 async function sendTicketNotification(ticket){
-  const adminEmail = process.env.ADMIN_EMAIL;
-  const subject = `New message ${ticket.id}`;
-  let html = `<p>New message <strong>${ticket.id}</strong> received on ${new Date(ticket.date).toLocaleString()}.</p>`;
-  html += `<p><strong>Name:</strong> ${ticket.name} — <strong>Email:</strong> ${ticket.email} — <strong>Phone:</strong> ${ticket.phone || 'N/A'}</p>`;
-  html += `<h4>Message</h4><p>${(ticket.message || '').replace(/\n/g, '<br>')}</p>`;
-  html += `<p><a href="/contact.html">Open contact page</a></p>`;
-
-  // Email notification
-  if (!mailer){
-    console.info('SMTP not configured — skipping ticket email, but logging notification:');
-    console.info(subject);
-    console.info(html);
-  } else {
-    try{ await mailer.sendMail({ from: process.env.SMTP_FROM || process.env.SMTP_USER, to: adminEmail, subject, html }); }
-    catch(err){ console.warn('Failed to send ticket notification email', err); }
-  }
-
-  // WhatsApp notification (optional)
-  const whatsappTo = process.env.TWILIO_WHATSAPP_TO;
-  const whatsappFrom = process.env.TWILIO_WHATSAPP_FROM;
-  if (twilioClient && whatsappTo && whatsappFrom){
-    try{
-      const toAddr = whatsappTo.startsWith('whatsapp:') ? whatsappTo : `whatsapp:${whatsappTo}`;
-      const fromAddr = whatsappFrom.startsWith('whatsapp:') ? whatsappFrom : `whatsapp:${whatsappFrom}`;
-      const body = `New message ${ticket.id} — ${ticket.name} — ${ticket.email} — ${ticket.phone || ''} \n${(ticket.message||'').slice(0,200)}`;
-      await twilioClient.messages.create({ from: fromAddr, to: toAddr, body });
-    }catch(err){ console.warn('Failed to send WhatsApp ticket notification', err); }
-  }
-
-  // SMS notification (optional) — uses TWILIO_SMS_FROM and TWILIO_SMS_TO or ADMIN_PHONE
-  const smsTo = process.env.TWILIO_SMS_TO || process.env.ADMIN_PHONE;
-  const smsFrom = process.env.TWILIO_SMS_FROM; // must be a Twilio number (E.164)
-  if (twilioClient && smsTo && smsFrom){
-    try{
-      const body = `New message ${ticket.id} — ${ticket.name} — ${ticket.phone || ''} — ${ticket.email}. ${(ticket.message||'').slice(0,140)}`;
-      await twilioClient.messages.create({ from: smsFrom, to: smsTo, body });
-    }catch(err){ console.warn('Failed to send SMS ticket notification', err); }
-  }
+  // Email is now handled client-side in contact.html
+  console.log(`Ticket ${ticket.id} received on server.`);
 }
 
 const DATA_DIR = path.join(__dirname, 'data');

@@ -140,6 +140,18 @@
       // store locally
       const tickets = JSON.parse(localStorage.getItem('sajj:tickets') || '[]'); tickets.push(ticket); localStorage.setItem('sajj:tickets', JSON.stringify(tickets));
 
+      // Send email directly via FormSubmit
+      try {
+        await fetch('https://formsubmit.co/ajax/sajjplace@gmail.com', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            _subject: `New Message from ${name}`,
+            Name: name, Email: email, Phone: phone, Message: message
+          })
+        });
+      } catch(e) { console.log('Email skipped'); }
+
       // try send to server (optional endpoint /api/tickets)
       try{
         await fetch('/api/tickets', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(ticket) });
