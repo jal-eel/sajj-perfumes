@@ -19,17 +19,6 @@ const path = require('path');
 let fetch = null;
 try { fetch = require('node-fetch'); } catch(e) { console.log('Note: node-fetch not found (Paystack verify disabled)'); }
 
-let nodemailer = null;
-try { nodemailer = require('nodemailer'); } catch(e) { console.log('Note: nodemailer not found (Emails disabled)'); }
-
-// optional Twilio client for WhatsApp/SMS notifications
-let twilioClient = null;
-if (process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN) {
-  try {
-    const Twilio = require('twilio');
-    twilioClient = Twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
-  } catch(e) { console.log('Note: twilio not found'); }
-}
 
 const app = express();
 app.use(cors());
@@ -51,45 +40,34 @@ function requireAdmin(req, res, next){
   res.set('WWW-Authenticate', 'Basic realm="SAJJ Admin"'); return res.status(401).end();
 }
 
-// Nodemailer transporter (optional - only active when SMTP_* env vars are set)
-let mailer = null;
-if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS){
-  mailer = nodemailer.createTransport({ host: process.env.SMTP_HOST, port: Number(process.env.SMTP_PORT || 587), secure: false, auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS } });
-}
+  // Simple email via FormSubmit (No SMTP/Password needed)
+  const adminEmail = process.env.ADMIN_EMAIL || 'sajjplace@gmail.com';
+  
+  const payload = {
+    _subject: `New Order ${order.id} - ₦${Number(order.total).toFixed(2)}`,
+    _template: 'table',
+    Order_ID: order.id,
+    Date: new Date(order.date).toLocaleString(),
+    Customer_Name: order.customer.name,
+    Customer_Email: order.customer.email,
+    Customer_Phone: order.customer.phone,
+    Address: order.customer.address,
+    Items: (order.items || []).map(i => `${i.qty}x ${i.name}`).join(', '),
+    Total: `₦${Number(order.total).toFixed(2)}`,
+    Payment_Method: order.payment ? order.payment.method : 'N/A',
+    Notes: order.notes || ''
+  };
 
-async function sendOrderNotification(order){
-  const adminEmail = process.env.ADMIN_EMAIL;
-  if (!adminEmail) return; // nothing to do
-  const subject = `New order ${order.id} — ₦${Number(order.total).toFixed(2)}`;
-  let html = `<p>New order <strong>${order.id}</strong> placed on ${new Date(order.date).toLocaleString()}.</p>`;
-  html += `<p><strong>Name:</strong> ${order.customer.name} — <strong>Email:</strong> ${order.customer.email}</p>`;
-  html += '<h4>Items</h4><ul>' + (order.items || []).map(i => `<li>${i.name} — ${i.qty} × ₦${Number(i.price).toFixed(2)}</li>`).join('') + '</ul>';
-  if (order.payment){ html += `<p><strong>Payment:</strong> ${order.payment.method || 'n/a'} ${order.payment.reference ? ' — Ref: '+order.payment.reference : ''}</p>`; }
-  html += `<p><a href="/orders.html">Open admin orders page</a></p>`;
-
-  if (!mailer){
-    console.info('SMTP not configured — skipping email, but logging notification:');
-    console.info(subject);
-    console.info(html);
-  } else {
-    try{ await mailer.sendMail({ from: process.env.SMTP_FROM || process.env.SMTP_USER, to: adminEmail, subject, html }); }
-    catch(err){ console.warn('Failed to send order notification email', err); }
+  if (fetch) {
+    fetch(`https://formsubmit.co/ajax/${adminEmail}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(() => console.log('Order email sent via FormSubmit'))
+    .catch(e => console.error('Failed to send email', e));
   }
 
-  // WhatsApp via Twilio (optional)
-  const whatsappTo = process.env.TWILIO_WHATSAPP_TO;
-  const whatsappFrom = process.env.TWILIO_WHATSAPP_FROM;
-  if (twilioClient && whatsappTo && whatsappFrom){
-    try{
-      const toAddr = whatsappTo.startsWith('whatsapp:') ? whatsappTo : `whatsapp:${whatsappTo}`;
-      const fromAddr = whatsappFrom.startsWith('whatsapp:') ? whatsappFrom : `whatsapp:${whatsappFrom}`;
-      const body = `New order ${order.id} — ₦${Number(order.total).toFixed(2)}\nName: ${order.customer.name}\nEmail: ${order.customer.email}\nItems: ${(order.items||[]).map(i=>`${i.qty}×${i.name}`).join(', ')}\nView: ${process.env.SITE_URL || 'http://localhost:3000'}/orders.html`;
-      await twilioClient.messages.create({ from: fromAddr, to: toAddr, body });
-    }catch(err){ console.warn('Failed to send WhatsApp notification', err); }
-  } else {
-    if ((process.env.TWILIO_ACCOUNT_SID || process.env.TWILIO_AUTH_TOKEN) && !twilioClient) console.warn('Twilio credentials found but client not initialized. Check TWILIO_ACCOUNT_SID and TWILIO_AUTH_TOKEN.');
-  }
-}
 
 // Tickets/email & WhatsApp notification
 async function sendTicketNotification(ticket){
