@@ -90,11 +90,20 @@
                     <tbody id="orders-body"></tbody>
                 </table>
             </div>
+
+            <div style="margin-top: 20px; display: flex; justify-content: center; gap: 15px; align-items: center;">
+                <button id="btn-prev" class="btn btn-ghost" onclick="changePage(-1)">Previous</button>
+                <span id="page-info" style="font-weight:bold;">Page 1 of 1</span>
+                <button id="btn-next" class="btn btn-ghost" onclick="changePage(1)">Next</button>
+            </div>
         </div>
     </div>
 
     <script>
         let allOrders = [];
+        let currentOrders = [];
+        let currentPage = 1;
+        const itemsPerPage = 10;
 
         async function loadOrders() {
             try {
@@ -106,7 +115,21 @@
                 }
                 
                 allOrders = await res.json();
-                renderOrders(allOrders);
+                allOrders.reverse(); // Show newest first
+                
+                // Re-apply search filter if active
+                const term = document.getElementById('search-input').value.toLowerCase();
+                if (term) {
+                    currentOrders = allOrders.filter(o => 
+                        o.id.toLowerCase().includes(term) || 
+                        o.customer.name.toLowerCase().includes(term) ||
+                        o.customer.email.toLowerCase().includes(term)
+                    );
+                } else {
+                    currentOrders = allOrders;
+                }
+                
+                renderOrders();
                 updateStats(allOrders);
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('orders-table').style.display = 'table';
@@ -125,14 +148,28 @@
             document.getElementById('stat-pending').textContent = pending;
         }
 
-        function renderOrders(orders) {
+        function renderOrders() {
+            const totalPages = Math.ceil(currentOrders.length / itemsPerPage) || 1;
+            if (currentPage < 1) currentPage = 1;
+            if (currentPage > totalPages) currentPage = totalPages;
+
+            document.getElementById('page-info').textContent = `Page ${currentPage} of ${totalPages}`;
+            document.getElementById('btn-prev').disabled = currentPage === 1;
+            document.getElementById('btn-next').disabled = currentPage === totalPages;
+            document.getElementById('btn-prev').style.opacity = currentPage === 1 ? 0.5 : 1;
+            document.getElementById('btn-next').style.opacity = currentPage === totalPages ? 0.5 : 1;
+
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const ordersSlice = currentOrders.slice(start, end);
+
             const tbody = document.getElementById('orders-body');
-            if (orders.length === 0) {
+            if (ordersSlice.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px;">No orders found.</td></tr>';
                 return;
             }
 
-            tbody.innerHTML = orders.slice().reverse().map(o => {
+            tbody.innerHTML = ordersSlice.map(o => {
                 const isPaid = o.payment && o.payment.paid;
                 const isDelivered = o.payment && o.payment.delivered;
                 
@@ -171,13 +208,19 @@
         // Search Filter
         document.getElementById('search-input').addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
-            const filtered = allOrders.filter(o => 
+            currentOrders = allOrders.filter(o => 
                 o.id.toLowerCase().includes(term) || 
                 o.customer.name.toLowerCase().includes(term) ||
                 o.customer.email.toLowerCase().includes(term)
             );
-            renderOrders(filtered);
+            currentPage = 1;
+            renderOrders();
         });
+
+        function changePage(delta) {
+            currentPage += delta;
+            renderOrders();
+        }
 
         // Actions
         async function toggleStatus(id, field) {
