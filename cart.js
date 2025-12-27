@@ -305,21 +305,21 @@
 
     // --- WHATSAPP ORDER (RELIABLE & INSTANT) ---
     // Instead of email, we send the order directly to your WhatsApp.
-    const itemsList = cart.map(i => `- ${i.qty}x ${i.name}`).join('%0a'); // %0a is a new line code
-    const waText = `*NEW ORDER: ${orderId}* 📦%0a` +
-                   `------------------%0a` +
-                   `*Customer:* ${data.name}%0a` +
-                   `*Phone:* ${data.phone}%0a` +
-                   `*Address:* ${data.address}%0a` +
-                   `------------------%0a` +
-                   `*Items:*%0a${itemsList}%0a` +
-                   `------------------%0a` +
-                   `*Total:* ₦${formatPrice(totalAmount)}%0a` +
-                   `*Payment:* ${payment.method}%0a` +
+    const itemsList = cart.map(i => `- ${i.qty}x ${i.name}`).join('\n');
+    const waText = `*NEW ORDER: ${orderId}* 📦\n` +
+                   `------------------\n` +
+                   `*Customer:* ${data.name}\n` +
+                   `*Phone:* ${data.phone}\n` +
+                   `*Address:* ${data.address}\n` +
+                   `------------------\n` +
+                   `*Items:*\n${itemsList}\n` +
+                   `------------------\n` +
+                   `*Total:* ₦${formatPrice(totalAmount)}\n` +
+                   `*Payment:* ${payment.method}\n` +
                    `*Notes:* ${data.notes || 'None'}`;
 
     const waNumber = '2348062193723'; // Your business number
-    const waURL = `https://wa.me/${waNumber}?text=${waText}`;
+    const waURL = `https://wa.me/${waNumber}?text=${encodeURIComponent(waText)}`;
 
     // Redirect customer to WhatsApp to send the message
     window.location.href = waURL;
