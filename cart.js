@@ -220,7 +220,12 @@
 
   async function sendOrderToServer(order){
     try{
-      const res = await fetch('/api/orders', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(order) });
+      const res = await fetch('/api/orders', { 
+        method: 'POST', 
+        keepalive: true, // Keeps request alive even if page redirects
+        headers: {'Content-Type':'application/json'}, 
+        body: JSON.stringify(order) 
+      });
       if (res.ok) return await res.json();
     }catch(e){ }
     return null;
@@ -243,37 +248,12 @@
 
     // mode: 'no-cors' is required for sending data to Google Scripts from a browser
     return fetch(GOOGLE_SCRIPT_URL, {
-      method: 'POST', mode: 'no-cors',
+      method: 'POST', mode: 'no-cors', 
+      keepalive: true, // Keeps request alive even if page redirects
       headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)
     })
     .then(() => console.log('✅ Sent to Google Sheet'))
     .catch(e => console.log('❌ Sheet Error', e));
-  }
-
-  // --- NEW: DIRECT EMAIL VIA FORMSUBMIT (Client Side) ---
-  async function sendToEmail(order) {
-    const adminEmail = 'sajjplace@gmail.com';
-    const data = {
-      _subject: `New Order ${order.id} - ₦${Number(order.total).toFixed(2)}`,
-      _template: 'table',
-      Order_ID: order.id,
-      Date: new Date(order.date).toLocaleString(),
-      Customer_Name: order.customer.name,
-      Customer_Email: order.customer.email,
-      Customer_Phone: order.customer.phone,
-      Address: order.customer.address,
-      Items: (order.items || []).map(i => `${i.qty}x ${i.name}`).join(', '),
-      Total: `₦${Number(order.total).toFixed(2)}`,
-      Payment_Method: order.payment ? order.payment.method : 'N/A',
-      Notes: order.notes || ''
-    };
-    try {
-      await fetch(`https://formsubmit.co/ajax/${adminEmail}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(data)
-      });
-    } catch(e) { console.log('Email send failed', e); }
   }
 
   // --- UPDATED PLACE ORDER WITH EXCEL SYNC ---
@@ -315,12 +295,34 @@
       localStorage.setItem('sajj_discount_used_SAMPLE10', 'true');
     }
 
-    sendOrderToServer(order).catch(()=>{});
-    await sendToGoogleSheet(order);
-    await sendToEmail(order); // Send email directly from browser
+    // Fire and forget (Don't await). This ensures the redirect happens INSTANTLY.
+    sendOrderToServer(order);
+    sendToGoogleSheet(order);
+    
+    // Clear cart immediately
     localStorage.setItem('cart:items', JSON.stringify([]));
     try{ window.dispatchEvent(new Event('storage')); }catch(e){}
-    window.location.href = 'thankyou.html?order=' + encodeURIComponent(orderId);
+
+    // --- WHATSAPP ORDER (RELIABLE & INSTANT) ---
+    // Instead of email, we send the order directly to your WhatsApp.
+    const itemsList = cart.map(i => `- ${i.qty}x ${i.name}`).join('%0a'); // %0a is a new line code
+    const waText = `*NEW ORDER: ${orderId}* 📦%0a` +
+                   `------------------%0a` +
+                   `*Customer:* ${data.name}%0a` +
+                   `*Phone:* ${data.phone}%0a` +
+                   `*Address:* ${data.address}%0a` +
+                   `------------------%0a` +
+                   `*Items:*%0a${itemsList}%0a` +
+                   `------------------%0a` +
+                   `*Total:* ₦${formatPrice(totalAmount)}%0a` +
+                   `*Payment:* ${payment.method}%0a` +
+                   `*Notes:* ${data.notes || 'None'}`;
+
+    const waNumber = '2348062193723'; // Your business number
+    const waURL = `https://wa.me/${waNumber}?text=${waText}`;
+
+    // Redirect customer to WhatsApp to send the message
+    window.location.href = waURL;
   }
 
   if (codBtn){ codBtn.addEventListener('click', () => {
