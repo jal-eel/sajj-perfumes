@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /api/
+Disallow: /data/
+Disallow: /uploads/
+Disallow: /orders.html
+Disallow: /tickets.html

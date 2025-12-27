@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Cart — SAJJ</title>
+  <meta name="description" content="Review your selected perfumes and proceed to checkout at SAJJ Perfumes.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="logo-removebg-preview.png" type="image/png">
+  <link rel="apple-touch-icon" href="logo-removebg-preview.png">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="site-nav" aria-label="Main">
+      <div class="nav-inner">
+        <a class="logo" href="index.html" aria-label="Back to home"><img src="logo-removebg-preview.png" alt="SAJJ logo"></a>
+        <div style="margin-left:auto; display:flex; gap:12px; align-items:center;">
+          <a href="index.html" class="btn">Continue shopping</a>
+          <a href="cart.html" class="cart-link">🛒 <span id="nav-cart-count" class="cart-count">0</span></a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="cart-page">
+    <h1>Your Cart</h1>
+    <div class="cart-grid">
+      <section class="cart-items-list" id="cart-items-list">
+        <!-- rendered cart items -->
+      </section>
+
+      <aside class="cart-summary" id="cart-summary">
+        <div id="shipping-promo" style="font-size:14px; color:#ff6b00; margin-bottom:10px; font-weight:bold; min-height:20px;"></div>
+        <div class="progress-track" style="background:#eee; height:8px; border-radius:4px; margin-bottom:15px; overflow:hidden;">
+          <div id="promo-progress" style="height:100%; width:0%; background:#ff6b00; transition:width 0.5s ease;"></div>
+        </div>
+        <div style="display:flex; gap:8px; margin-bottom:10px;">
+          <input type="text" id="discount-code" placeholder="Discount code" style="flex:1; padding:8px; border:1px solid #ddd; border-radius:4px;">
+          <button id="apply-discount" class="btn btn-ghost" style="padding:8px;">Apply</button>
+        </div>
+        <div id="discount-msg" style="font-size:12px; margin-bottom:10px; min-height:18px;"></div>
+        <div class="summary-row"><span>Subtotal</span><span id="summary-sub">₦0.00</span></div>
+        <div class="summary-row"><span>Delivery</span><span id="summary-ship">₦0.00</span></div>
+        <div class="summary-row"><span>Bottle Upgrade</span><span id="summary-bottle">₦0.00</span></div>
+        <div class="summary-row" style="font-size:18px"><strong>Total</strong><strong id="summary-total">₦0.00</strong></div>
+
+        <form id="checkout-form" class="checkout-form" aria-label="Checkout form">
+          <input id="cust-name" type="text" placeholder="Full name" required>
+          <input id="cust-email" type="email" placeholder="Email" required>
+          <input id="cust-phone" type="tel" placeholder="Phone" required>
+          <textarea id="cust-address" placeholder="Shipping address" rows="3" required></textarea>
+          <textarea id="cust-notes" placeholder="Order notes (optional)" rows="2"></textarea>
+          
+          <p style="font-size:14px;font-weight:bold;margin:8px 0 4px;">Bottle Preference:</p>
+          <div class="bottle-grid">
+            <label class="bottle-option">
+              <input type="radio" name="bottle-type" value="Small classic" checked>
+              <div class="bottle-card">
+                <div class="img-placeholder" style="height:60px;background:#eee;margin-bottom:4px;font-size:10px;display:flex;align-items:center;justify-content:center;">Image</div>
+                <span>Small classic</span>
+                <span class="price-tag">+₦0</span>
+              </div>
+            </label>
+            <label class="bottle-option">
+              <input type="radio" name="bottle-type" value="Small but Fancy">
+              <div class="bottle-card">
+                <div class="img-placeholder" style="height:60px;background:#eee;margin-bottom:4px;font-size:10px;display:flex;align-items:center;justify-content:center;">Image</div>
+                <span>Small but Fancy</span>
+                <span class="price-tag">+₦1,000</span>
+              </div>
+            </label>
+            <label class="bottle-option">
+              <input type="radio" name="bottle-type" value="Big bottle">
+              <div class="bottle-card">
+                <div class="img-placeholder" style="height:60px;background:#eee;margin-bottom:4px;font-size:10px;display:flex;align-items:center;justify-content:center;">Image</div>
+                <span>Big bottle</span>
+                <span class="price-tag">+₦3,000</span>
+              </div>
+            </label>
+          </div>
+
+          <select id="ship-method">
+            <option value="0">Pick-up (₦0)</option>
+            <option value="2000">Delivery (₦2,000)</option>
+          </select>
+
+          <div class="payment-actions">
+            <button id="pay-bank" class="btn btn-ghost" type="button">Pay by Bank transfer</button>
+            <button id="place-order-cod" class="btn btn-ghost" type="button">Place order (Cash on delivery)</button>
+          </div>
+        </form>
+        <div id="order-msg" style="margin-top:12px;min-height:24px"></div>
+
+        <div id="bank-panel" class="bank-panel" style="display:none; margin-top:12px; padding:12px; border-radius:8px; background:#fff; box-shadow:0 6px 18px rgba(16,24,40,0.06);">
+          <div class="bank-details">
+            <p><strong>Bank transfer details</strong></p>
+            <p>Account name: <strong>Asmau Isa Sadiq</strong></p>
+            <p>Account number: <strong id="bank-acc-num">8062193723</strong> <button type="button" id="copy-bank-btn" class="btn btn-ghost" style="padding:2px 8px;font-size:12px;margin-left:8px;border:1px solid #ccc">Copy</button></p>
+            <p>Bank: <strong>MoMo PSB</strong></p>
+            <p>Please enter the transaction reference or attach proof of payment below.</p>
+          </div>
+          <input id="bank-ref" type="text" placeholder="Transaction reference (optional)" style="width:100%;margin-top:8px;padding:8px;border-radius:6px;border:1px solid #ddd">
+          <input id="bank-proof" type="file" accept="image/*,.pdf" style="margin-top:8px">
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <button id="submit-bank" class="btn btn-primary">Submit bank transfer</button>
+            <button id="cancel-bank" class="btn btn-ghost">Cancel</button>
+          </div>
+        </div>
+
+        <!-- Paystack inline JS (test-mode). Replace the key in cart.js with your own test/public key. Server-side verification is recommended for production. -->
+        <!-- <script src="https://js.paystack.co/v1/inline.js"></script> -->
+      </aside>
+    </div>
+
+    <!-- Quick Shop Section -->
+    <section style="margin-top:40px; padding-top:20px; border-top:2px dashed #ddd">
+      <h2 style="font-family:'Titan One', sans-serif; margin-bottom:15px">Quick Shop</h2>
+      <div id="quick-shop-grid" class="product-grid" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:15px"></div>
+    </section>
+  </main>
+
+  <!-- Confetti Library for celebration -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="cart.js"></script>
+</body>
+</html>

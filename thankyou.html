@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Order Confirmed — SAJJ</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="logo-removebg-preview.png" type="image/png">
+  <link rel="apple-touch-icon" href="logo-removebg-preview.png">
+  <style>
+    .thankyou-wrap{ max-width:600px; margin:40px auto; padding:20px; text-align:center; }
+    .order-summary{ background:#fff; padding:20px; border-radius:12px; box-shadow:0 8px 30px rgba(0,0,0,0.08); margin-top:20px; text-align:left; }
+    .summary-row{ display:flex; justify-content:space-between; margin-bottom:8px; }
+    .total-row{ font-weight:bold; font-size:1.2em; border-top:2px solid #eee; padding-top:10px; margin-top:10px; }
+    .notes-box{ background:#fff8f0; border:1px dashed #ff6b00; padding:10px; border-radius:8px; margin-top:15px; font-size:0.9em; color:#555; }
+    .receipt-notice { background: #e0f7fa; color: #006064; padding: 12px; border-radius: 8px; margin: 20px 0; font-weight: bold; border: 2px solid #006064; font-size: 1.1em; }
+    @media print {
+      .site-header, .no-print { display: none !important; }
+      .thankyou-wrap { margin: 0; padding: 0; max-width: 100%; }
+      .order-summary { box-shadow: none; border: 1px solid #000; margin-top: 0; }
+      body { background: #fff; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="site-nav">
+      <div class="nav-inner">
+        <a class="logo" href="index.html"><img src="logo-removebg-preview.png" alt="SAJJ"></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="thankyou-wrap">
+    <h1 style="font-family:'Titan One', sans-serif; font-size:2.5rem; margin-bottom:10px;">Order Confirmed! 🎉</h1>
+    <p>Thanks for your order. We've received it and will begin processing shortly.</p>
+    
+    <div id="order-loading">Loading order details...</div>
+    <div id="order-content" style="display:none">
+      <div class="receipt-notice">⚠️ PLEASE SAVE THIS PAGE. THIS IS YOUR OFFICIAL RECEIPT.</div>
+      
+      <div class="order-summary">
+        <h3 style="border-bottom:1px solid #eee; padding-bottom:10px; margin-bottom:15px;">Order #<span id="ord-id"></span></h3>
+        <div id="ord-items"></div>
+        <div class="summary-row" style="margin-top:15px; color:#666;"><span>Subtotal</span><span id="ord-sub"></span></div>
+        <div class="summary-row" style="color:#666;"><span>Shipping</span><span id="ord-ship"></span></div>
+        <div class="summary-row" style="color:#666;"><span>Bottle Upgrade</span><span id="ord-bottle"></span></div>
+        <div class="summary-row total-row"><span>Total</span><span id="ord-total"></span></div>
+        
+        <div id="ord-notes-wrap" style="display:none">
+          <div class="notes-box">
+            <strong>📝 Order Notes:</strong><br>
+            <span id="ord-notes"></span>
+          </div>
+        </div>
+      </div>
+      
+      <div style="margin-top:30px;" class="no-print">
+        <button onclick="window.print()" class="btn btn-ghost" style="margin-right:10px; border:2px solid #333; font-weight:bold;">🖨️ Print Receipt</button>
+        <button id="download-pdf" class="btn btn-ghost" style="margin-right:10px; border:2px solid #333; font-weight:bold;">📄 Download PDF</button>
+        <a href="index.html" class="btn btn-primary">Back to Home</a>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script>
+    (function(){
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('order');
+      if (!id) { document.getElementById('order-loading').textContent = 'Order not found.'; return; }
+
+      const orders = JSON.parse(localStorage.getItem('sajj:orders') || '[]');
+      const order = orders.find(o => o.id === id);
+
+      if (!order) { document.getElementById('order-loading').textContent = 'Order details not found in local history.'; return; }
+
+      document.getElementById('order-loading').style.display = 'none';
+      document.getElementById('order-content').style.display = 'block';
+
+      document.getElementById('ord-id').textContent = order.id;
+      
+      const itemsContainer = document.getElementById('ord-items');
+      order.items.forEach(i => {
+        const div = document.createElement('div');
+        div.className = 'summary-row';
+        div.innerHTML = `<span>${i.qty}x ${i.name}</span><span>₦${(i.price * i.qty).toFixed(2)}</span>`;
+        itemsContainer.appendChild(div);
+      });
+
+      const sub = order.items.reduce((s,i) => s + i.price * i.qty, 0);
+      document.getElementById('ord-sub').textContent = '₦' + sub.toFixed(2);
+      document.getElementById('ord-ship').textContent = '₦' + Number(order.shipping||0).toFixed(2);
+      document.getElementById('ord-bottle').textContent = '₦' + Number(order.bottleCost||0).toFixed(2);
+      document.getElementById('ord-total').textContent = '₦' + Number(order.total).toFixed(2);
+
+      if (order.notes) {
+        document.getElementById('ord-notes-wrap').style.display = 'block';
+        document.getElementById('ord-notes').textContent = order.notes;
+      }
+
+      document.getElementById('download-pdf').addEventListener('click', function(){
+        // Create a temporary container for the PDF content
+        const pdfContent = document.createElement('div');
+        pdfContent.style.padding = '20px';
+        
+        // 1. Add Logo
+        const logoContainer = document.createElement('div');
+        logoContainer.style.textAlign = 'center';
+        logoContainer.style.marginBottom = '20px';
+        logoContainer.innerHTML = '<img src="logo-removebg-preview.png" style="height:80px;">';
+        pdfContent.appendChild(logoContainer);
+
+        // 2. Add Order Summary (Clone)
+        const summaryClone = document.querySelector('.order-summary').cloneNode(true);
+        summaryClone.style.boxShadow = 'none';
+        summaryClone.style.border = '1px solid #333';
+        pdfContent.appendChild(summaryClone);
+
+        // 3. Add Footer Message
+        const footerMsg = document.createElement('div');
+        footerMsg.style.textAlign = 'center';
+        footerMsg.style.marginTop = '20px';
+        footerMsg.style.fontSize = '14px';
+        footerMsg.style.color = '#555';
+        footerMsg.innerHTML = '<strong>Thank you for shopping with SAJJ!</strong><br>We hope to see you again soon.';
+        pdfContent.appendChild(footerMsg);
+
+        const opt = {
+          margin:       15,
+          filename:     'SAJJ_Receipt_' + order.id + '.pdf',
+          image:        { type: 'jpeg', quality: 0.98 },
+          html2canvas:  { scale: 2 },
+          jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+        
+        // Render off-screen to ensure styles apply correctly
+        const offScreen = document.createElement('div');
+        offScreen.style.position = 'fixed';
+        offScreen.style.left = '-10000px';
+        offScreen.style.top = '0';
+        offScreen.style.width = '600px'; // Fixed width for PDF consistency
+        offScreen.style.background = '#fff';
+        offScreen.appendChild(pdfContent);
+        document.body.appendChild(offScreen);
+
+        html2pdf().set(opt).from(pdfContent).save().then(() => {
+            document.body.removeChild(offScreen);
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

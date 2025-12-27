@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Orders — SAJJ Admin</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="logo-removebg-preview.png" type="image/png">
+  <link rel="apple-touch-icon" href="logo-removebg-preview.png">
+  <style>
+    .orders-wrap{ max-width:1100px;margin:30px auto;padding:0 16px }
+    .order-card{ background:#fff;padding:12px;border-radius:8px;margin-bottom:12px;box-shadow:0 8px 20px rgba(16,24,40,0.06) }
+    .order-actions{ margin-top:8px; display:flex; gap:8px }
+    .order-meta{ display:flex; gap:12px; flex-wrap:wrap }
+    .proof-img{ max-width:160px; margin-top:8px; border-radius:8px }
+  </style>
+</head>
+<body>
+  <!-- Login Overlay -->
+  <div id="login-overlay">
+    <form class="login-box" id="login-form">
+      <h2>Admin Access</h2>
+      <input type="text" id="admin-user" placeholder="Username" required>
+      <input type="password" id="admin-pass" placeholder="Password" required>
+      <button type="submit">Unlock</button>
+      <div class="login-error" id="login-error"></div>
+    </form>
+  </div>
+
+  <main class="orders-wrap">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px">
+      <h1 style="margin:0">Incoming Orders</h1>
+      <button id="admin-logout" class="btn btn-ghost" style="border:2px solid #000;font-weight:bold">Logout 🔒</button>
+    </div>
+    <input type="text" id="order-search" placeholder="Search orders (Name, ID, Email)..." style="width:100%; padding:12px; margin-bottom:15px; border:2px solid #000; border-radius:8px; font-size:16px;">
+    <div id="orders-list">Loading…</div>
+  </main>
+  <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
+    <button onclick="clearAllOrders()" class="btn-clear">
+      🗑️ Clear All Orders
+    </button>
+</div>
+
+<style>
+  .btn-clear {
+    background: #000;
+    color: #fff;
+    padding: 10px 20px;
+    border: 2px solid #000;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 4px 4px 0px #ff4d6d; /* SAJJ Pink Shadow */
+    transition: 0.2s;
+  }
+  .btn-clear:hover {
+    background: #ff4d6d;
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px #000;
+  }
+</style>
+  <script src="admin.js"></script>
+</body>
+</html>

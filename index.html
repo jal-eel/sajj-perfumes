@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAJJ Perfumes - Handcrafted Scents & Oils</title>
+    <meta name="description" content="Discover SAJJ Perfumes, the home of premium handcrafted oil perfumes in Abuja. Long-lasting scents that define your presence.">
+    <meta name="keywords" content="perfume oils, Abuja perfume, handcrafted scents, SAJJ, fragrance, oil perfume Nigeria, long lasting perfume">
+    <meta property="og:title" content="SAJJ Perfumes - Handcrafted Scents & Oils">
+    <meta property="og:description" content="Smell better than the rest with SAJJ. Premium oil perfumes crafted in Abuja.">
+    <meta property="og:image" content="logo-removebg-preview.png">
+    <meta property="og:type" content="website">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="logo-removebg-preview.png" type="image/png">
+    <link rel="apple-touch-icon" href="logo-removebg-preview.png">
+    <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Style+Script&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    
+    <nav class="site-nav" aria-label="Main navigation">
+        <div class="nav-inner">
+            <a class="logo" href="#home" aria-label="SAJJ home"><img src="logo-removebg-preview.png" alt="SAJJ logo"> The Sajj Place</a>
+
+            <button class="nav-toggle" aria-expanded="false" aria-label="Toggle menu">
+                <span class="hamburger"></span>
+            </button>
+
+            <div class="nav-links-wrap">
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="review.html">Reviews</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+
+                <div class="nav-actions">
+                    <a href="shop.html" class="btn btn-cta">Shop</a>
+                    <a href="cart.html" class="cart-link" aria-label="View cart">🛒 <span id="nav-cart-count" class="cart-count">0</span></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="head">
+        <h1>Welcome to <span class="style-script-regular">SAJJ</span> </h1>
+        <p>Smell better than the rest</p>
+    </div>
+
+    <section id="home">
+        <div class="slideshow" aria-label="Image slideshow">
+            <button class="slideshow-control prev" aria-label="Previous slide">‹</button>
+
+            <div class="slides-wrapper">
+                <div class="slide active" data-index="1">
+                    <div class="slide-inner">
+                        <img src="jaleel-and-khalid.jpg" alt="Slide 1" style="width: 100%; height: 100%; object-fit: cover;">
+                        <div class="caption">Caption 1 (optional)</div>
+                    </div>
+                </div>
+
+                <div class="slide" data-index="2">
+                    <div class="slide-inner">
+                        <img src="Jezreel1.jpg" alt="Slide 2" style="width: 100%; height: 100%; object-fit: cover;">
+                        <div class="caption">Caption 2 (optional)</div>
+                    </div>
+                </div>
+
+                <div class="slide" data-index="3">
+                    <div class="slide-inner">
+                        <img src="sunkiss-jaleel.jpg" alt="Slide 3" style="width: 100%; height: 100%; object-fit: cover;">
+                        <div class="caption">Caption 3 (optional)</div>
+                    </div>
+                </div>
+
+                <div class="slide" data-index="4">
+                    <div class="slide-inner">
+                        <img src="Snapchat-1521815874.jpg" alt="Slide 4" style="width: 100%; height: 100%; object-fit: cover;">
+                        <div class="caption">Caption 4 (optional)</div>
+                    </div>
+                </div>
+                <div class="slide" data-index="5">
+                    <div class="slide-inner">
+                        <img src="Snapchat-1933234781.jpg" alt="Slide 5" style="width: 100%; height: 100%; object-fit: cover;">
+                        <div class="caption">Caption 5 (optional)</div>
+                    </div>
+                </div>
+                <div class="slide" data-index="6">
+                    <div class="slide-inner">
+                        <img src="Snapchat-631902205.jpg" alt="Slide 6" style="width: 100%; height: 100%; object-fit: cover;">
+                        <div class="caption">Caption 6 (optional)</div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="slideshow-control next" aria-label="Next slide">›</button>
+
+            <div class="slideshow-dots" role="tablist" aria-label="Slide navigation">
+                <button class="dot active" data-index="1" aria-label="Go to slide 1"></button>
+                <button class="dot" data-index="2" aria-label="Go to slide 2"></button>
+                <button class="dot" data-index="3" aria-label="Go to slide 3"></button>
+                <button class="dot" data-index="4" aria-label="Go to slide 4"></button>
+                <button class="dot" data-index="5" aria-label="Go to slide 5"></button>
+                <button class="dot" data-index="6" aria-label="Go to slide 6"></button>
+            </div>
+        </div>
+    </section>
+    
+    <section id="shop">
+        <div class="shop-container">
+            <h2>Shop</h2>
+
+            <div style="margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center;">
+                <input type="text" id="product-search" placeholder="Search products..." style="padding: 8px; border-radius: 6px; border: 2px solid #000; flex: 1; max-width: 300px;">
+                <div style="display: flex; align-items: center;">
+                    <label for="sort-select" style="font-weight:bold; margin-right:10px;">Sort by:</label>
+                    <select id="sort-select" style="padding: 8px; border-radius: 6px; border: 2px solid #000;">
+                        <option value="default">Featured</option>
+                        <option value="price-asc">Price: Low to High</option>
+                        <option value="price-desc">Price: High to Low</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="product-grid" class="product-grid" data-limit="6">
+                <!-- Products will be rendered here. Each product shows an empty image slot until you add images. -->
+            </div>
+            
+            <div style="text-align:center; margin-top:30px;">
+                <a href="shop.html" class="btn btn-primary" style="padding: 12px 24px; font-size: 1.1rem;">View All Products →</a>
+            </div>
+
+            <button class="cart-toggle" id="cart-toggle" aria-expanded="false">Cart (<span id="cart-count">0</span>)</button>
+
+            <aside class="cart-panel" id="cart-panel" aria-hidden="true">
+                <h3>Your Cart</h3>
+                <div id="cart-items" class="cart-items">
+                    <!-- Cart items inserted here -->
+                </div>
+                <div class="cart-summary">Total: ₦<span id="cart-total">0.00</span></div>
+                <div class="cart-actions">
+                    <a href="cart.html" class="btn btn-primary">Go to Checkout</a>
+                    <button id="close-cart" class="btn btn-ghost">Close</button>
+                </div>
+            </aside>
+        </div>
+    </section>
+
+      <div class="quiz-button-container">
+    <a href="quiz.html" class="sajj-quiz-btn">
+        <span class="btn-icon">✨</span> FIND YOUR SCENT
+    </a>
+</div>
+
+
+    <!-- FOOTER -->
+    <footer class="site-footer" role="contentinfo">
+        <div class="footer-inner">
+            <div class="footer-about">
+                <img src="logo-removebg-preview.png" alt="SAJJ logo" class="footer-logo">
+                <p>SAJJ — handcrafted scents and home essentials. Quality ingredients and timeless fragrances.</p>
+                <p class="footer-meta"> • <a href="mailto:sajjplace@gmail.com">sajjplace@gmail.com</a></p>
+            </div>
+
+            <nav class="footer-nav" aria-label="Footer quick links">
+                <h4>Quick links</h4>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="review.html">Reviews</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="policy.html">Store Policy</a></li>
+                </ul>
+            </nav>
+
+            <div class="footer-contact">
+                <h4>Contact</h4>
+                <address>
+                    No.1 Precious Otsu Close, Aco Estate, Lifecamp<br>
+                    Abuja, Nigeria
+                </address>
+                <p><a class="map-link" href="https://www.google.com/maps/search/?api=1&query=No.1+Precious+Otsu+Close+Aco+Estate+Lifecamp+Abuja+Nigeria" target="_blank" rel="noopener"><svg class="map-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"></path></svg><span>Get directions</span></a></p>
+                <p>Phone: <a href="tel:+2348062193723">08062193723</a></p>
+                <p>Support: <a href="mailto:sajjplace@gmail.com">sajjplace@gmail.com</a></p>
+            </div>
+
+            <div class="footer-newsletter">
+                <h4>Newsletter</h4>
+                <p>Get occasional updates and offers (no spam).</p>
+                <form id="newsletter-form" aria-label="Subscribe to newsletter">
+                    <input id="newsletter-email" type="email" placeholder="Your email" required aria-required="true">
+                    <button id="newsletter-btn" class="btn" type="submit">Subscribe</button>
+                </form>
+                <div id="newsletter-msg" role="status" aria-live="polite" class="newsletter-msg"></div>
+
+                <div class="social">
+                    <a href="https://instagram.com/sajjplace" target="_blank" aria-label="Instagram" class="social-link">📸 Instagram</a>
+                    <a href="https://facebook.com/sajjplace" target="_blank" aria-label="Facebook" class="social-link">📘 Facebook</a>
+                    <a href="https://tiktok.com/@thesajjplace" target="_blank" aria-label="TikTok" class="social-link">🎵 TikTok</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="payments">Payments accepted: <span class="payment-icons">[Cash on delivery] [Bank Transfer]</span></div>
+            <div class="copyright">&copy; <span id="copy-year"></span> SAJJ. All rights reserved.</div>
+            <button id="back-to-top" class="back-to-top" aria-label="Back to top">↑</button>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reviews — SAJJ</title>
+    <meta name="description" content="See what our customers are saying about SAJJ Perfumes. Real reviews from real scent lovers.">
+    <meta property="og:title" content="Customer Reviews - SAJJ Perfumes">
+    <meta property="og:image" content="logo-removebg-preview.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="logo-removebg-preview.png" type="image/png">
+    <link rel="apple-touch-icon" href="logo-removebg-preview.png">
+</head>
+<body>
+    
+    <nav class="site-nav" aria-label="Main navigation">
+        <div class="nav-inner">
+            <a class="logo" href="#home" aria-label="SAJJ home"><img src="logo-removebg-preview.png" alt="SAJJ logo"> The Sajj Place</a>
+            <button class="nav-toggle" aria-expanded="false" aria-label="Toggle menu">
+                <span class="hamburger"></span>
+            </button>
+            <div class="nav-links-wrap">
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="review.html">Reviews</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <a href="shop.html" class="btn btn-cta">Shop</a>
+                    <a href="cart.html" class="cart-link" aria-label="View cart">🛒 <span id="nav-cart-count" class="cart-count">0</span></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Titan+One&family=Pacifico&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- BRAND CSS --- */
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #fdfdfd;
+            color: #333;
+            text-align: center;
+        }
+
+        .sajj-logo-text {
+            font-family: 'Titan One', sans-serif;
+            font-size: 60px;
+            color: #FFFFFF;
+            text-transform: uppercase;
+            text-shadow: -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 3px 3px 0 #000;
+            margin: 0;
+        }
+
+        .pop-cursive {
+            font-family: 'Pacifico', cursive;
+            font-size: 1.5rem;
+            margin-top: -10px;
+        }
+
+        /* --- HEADER --- */
+        .reviews-header {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #f72585 0%, #72efdd 100%);
+            color: white;
+            border-bottom: 5px solid #000;
+        }
+
+        /* --- REVIEW CARDS GRID --- */
+        .reviews-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 50px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .review-card {
+            background: white;
+            padding: 30px;
+            border: 3px solid #000;
+            border-radius: 15px;
+            box-shadow: 8px 8px 0px #000;
+            transition: 0.3s;
+            text-align: left;
+        }
+
+        .review-card:hover {
+            transform: translate(-5px, -5px);
+            box-shadow: 13px 13px 0px #f72585; /* Pink shadow on hover */
+        }
+
+        .stars { color: #ffbe0b; font-size: 1.2rem; margin-bottom: 10px; }
+        .customer-name { font-family: 'Titan One', sans-serif; font-size: 0.8rem; margin-top: 15px; }
+
+        /* --- BUTTONS --- */
+        .btn-main {
+            background: #000;
+            color: #fff;
+            padding: 15px 40px;
+            font-family: 'Titan One', sans-serif;
+            border: 3px solid #000;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: 0.2s;
+            text-transform: uppercase;
+        }
+
+        .btn-main:hover {
+            background: #f72585;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* --- MODAL (POPUP) --- */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 30px;
+            border: 4px solid #000;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 20px;
+            position: relative;
+            box-shadow: 15px 15px 0px #72efdd;
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 20px; top: 10px;
+            font-size: 30px;
+            cursor: pointer;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+    
+
+    <section class="reviews-header">
+        <h1 class="sajj-logo-text">SAJJ</h1>
+        <p class="pop-cursive">What our scent-lovers say</p>
+        <div id="avg-rating-display" style="margin-top: 15px; font-family: 'Titan One', sans-serif; font-size: 1.2rem; color: #fff;"></div>
+    </section>
+<div class="sajj-slideshow-container">
+
+  <div class="mySlides fade">
+    <img src="Snapchat-1957642300.jpg" alt="Sample kit" class="img-placeholder-slot" style="object-fit: cover;">
+    <div class="slide-caption pop-cursive">Smell</div>
+  </div>
+
+  <div class="mySlides fade">
+    <img src="sajj-in-flower.jpg" alt="Ocean Splash" class="img-placeholder-slot" style="object-fit: cover;">
+    <div class="slide-caption pop-cursive">Better</div>
+  </div>
+
+  <div class="mySlides fade">
+    <img src="Snapchat-1537626332.jpg" alt="Velvet Rose" class="img-placeholder-slot" style="object-fit: cover;">
+    <div class="slide-caption pop-cursive">Than</div>
+  </div>
+
+  <div class="mySlides fade">
+    <img src="Snapchat-734244529.jpg" alt="Golden Oud" class="img-placeholder-slot" style="object-fit: cover;">
+    <div class="slide-caption pop-cursive">The</div>
+  </div>
+
+  <div class="mySlides fade">
+    <img src="Snapchat-1720463790.jpg" alt="Urban Musk" class="img-placeholder-slot" style="object-fit: cover;">
+    <div class="slide-caption pop-cursive">Rest</div>
+  </div>
+
+  <div class="mySlides fade">
+    <img src="Snapchat-615530636.jpg" alt="Citrus Burst" class="img-placeholder-slot" style="object-fit: cover;">
+    <div class="slide-caption pop-cursive">With Sajj</div>
+  </div>
+
+  <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+  <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+  <div class="dot-container">
+    <span class="dot" onclick="currentSlide(1)"></span>
+    <span class="dot" onclick="currentSlide(2)"></span>
+    <span class="dot" onclick="currentSlide(3)"></span>
+    <span class="dot" onclick="currentSlide(4)"></span>
+    <span class="dot" onclick="currentSlide(5)"></span>
+    <span class="dot" onclick="currentSlide(6)"></span>
+  </div>
+</div>
+
+<style>
+/* --- SLIDESHOW STYLES --- */
+.sajj-slideshow-container {
+  max-width: 1200px;
+  position: relative;
+  margin: 40px auto;
+  border: 5px solid #000; 
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 15px 15px 0px #72efdd; 
+  background: #fff;
+}
+
+.img-placeholder-slot {
+  width: 100%;
+  height: 550px; 
+  background-color: #f3f3f3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: 'Titan One', sans-serif;
+  color: #ccc;
+}
+
+.slide-caption {
+  position: absolute;
+  bottom: 50px;
+  width: 100%;
+  text-align: center;
+  color: #f72585; 
+  font-family: 'Pacifico', cursive;
+  font-size: 3rem;
+  text-shadow: 3px 3px 0px #000;
+  pointer-events: none;
+}
+
+/* Arrows */
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  padding: 20px;
+  margin-top: -30px;
+  color: white;
+  background-color: rgba(0,0,0,0.4);
+  font-weight: bold;
+  font-size: 24px;
+  border: none;
+  transition: 0.3s;
+  border-radius: 5px;
+  z-index: 10;
+}
+.next { right: 15px; }
+.prev { left: 15px; }
+.prev:hover, .next:hover { background-color: #f72585; }
+
+/* Dots Tracking */
+.dot-container {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  text-align: center;
+  z-index: 10;
+}
+.dot {
+  cursor: pointer;
+  height: 12px;
+  width: 12px;
+  margin: 0 5px;
+  background-color: rgba(255,255,255,0.6);
+  border: 2px solid #000;
+  border-radius: 50%;
+  display: inline-block;
+  transition: all 0.4s ease;
+}
+.active, .dot:hover {
+  background-color: #f72585;
+  width: 30px; /* Expands into a pill shape */
+  border-radius: 10px;
+}
+
+/* Fading animation */
+.fade {
+  animation: fadeEffect 1s ease-in-out;
+}
+@keyframes fadeEffect {
+  from {opacity: .6} 
+  to {opacity: 1}
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  .img-placeholder-slot { height: 380px; }
+  .slide-caption { font-size: 2.2rem; bottom: 60px; }
+}
+.sajj-collection { padding: 60px 5%; background: transparent; }
+.sajj-title { font-family: 'Titan One', sans-serif; font-size: 3rem; margin-bottom: 40px; }
+
+.sajj-flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    justify-content: center;
+}
+
+.product-card {
+    background: white;
+    border: 3px solid #000;
+    border-radius: 20px;
+    width: 320px;
+    padding: 20px;
+    box-shadow: 8px 8px 0px #000;
+    position: relative;
+    text-align: left;
+}
+
+.product-badge {
+    position: absolute;
+    top: -10px; right: 20px;
+    background: #000; color: #fff;
+    padding: 5px 15px;
+    font-family: 'Titan One', sans-serif;
+    font-size: 0.7rem;
+    border-radius: 5px;
+    z-index: 2;
+}
+
+.longevity-badge {
+    position: absolute;
+    top: -10px; left: 20px;
+    background: #fff;
+    color: #000;
+    border: 2px solid #000;
+    padding: 5px 10px;
+    font-family: 'Titan One', sans-serif;
+    font-size: 0.7rem;
+    border-radius: 5px;
+    z-index: 2;
+}
+.longevity-badge.oud { background: #000; color: #ffd700; border-color: #ffd700; }
+
+.product-img {
+    height: 180px;
+    background: #f0f0f0;
+    border: 2px solid #000;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+
+.product-title { font-family: 'Titan One', sans-serif; margin: 10px 0; font-size: 1.4rem; }
+
+/* SCENT PYRAMID */
+.scent-pyramid {
+    background: #f9f9f9;
+    padding: 10px;
+    border-left: 4px solid #f72585;
+    margin-bottom: 15px;
+    border-radius: 4px;
+}
+.note { font-size: 0.8rem; margin-bottom: 4px; }
+.note strong { text-transform: uppercase; font-size: 0.7rem; }
+
+/* PERFORMANCE BARS */
+.performance-metrics { margin-bottom: 15px; }
+.metric { display: flex; align-items: center; justify-content: space-between; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; margin-bottom: 8px; }
+.bar-bg { width: 120px; height: 10px; background: #eee; border: 1.5px solid #000; border-radius: 10px; overflow: hidden; }
+.bar-fill { height: 100%; background: #000; }
+
+.product-price { font-family: 'Titan One', sans-serif; font-size: 1.5rem; color: #f72585; }
+
+/* Theme Colors for Bars */
+.amber-theme .bar-fill { background: #ffbe0b; }
+.dayyan-theme .bar-fill { background: #72efdd; }
+.oud-theme .bar-fill { background: #560bad; }
+.intense-theme .bar-fill { background: #000; }
+.addictive-theme .bar-fill { background: #f72585; }
+
+/* --- RESPONSIVE LOGIC --- */
+
+/* 1. The Container: Use flex-wrap so cards move to the next line */
+.sajj-flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+/* 2. The Card: Ensure it doesn't exceed screen width on small phones */
+.product-card {
+    background: white;
+    border: 3px solid #000;
+    border-radius: 20px;
+    width: 320px; /* Default width for desktop */
+    max-width: 100%; /* Important for small screens */
+    padding: 20px;
+    box-shadow: 8px 8px 0px #000;
+    position: relative;
+    text-align: left;
+    box-sizing: border-box; /* Keeps padding inside the width */
+}
+
+/* 3. MOBILE ADJUSTMENTS (Phones and Tablets) */
+@media (max-width: 768px) {
+    .sajj-title {
+        font-size: 2rem; /* Smaller title on mobile */
+    }
+
+    .sajj-flex-container {
+        gap: 20px;
+        padding: 10px;
+    }
+
+    .product-card {
+        width: 100%; /* Card takes full width on mobile */
+        max-width: 350px; /* But don't let it get too huge */
+    }
+
+    .product-img {
+        height: 150px; /* Slightly shorter image area on mobile */
+    }
+
+    .metric {
+        flex-direction: column; /* Stack "Longevity" above the bar on tiny screens */
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .bar-bg {
+        width: 100%; /* Make bars full width of the card on mobile */
+    }
+}
+
+/* 4. Very Small Phones (Under 350px) */
+@media (max-width: 350px) {
+    .product-card {
+        padding: 15px;
+    }
+    .product-title {
+        font-size: 1.2rem;
+    }
+}
+/* ============================================================
+   FULL RESPONSIVE MEDIA QUERIES FOR SAJJ REVIEWS
+   ============================================================ */
+
+/* TABLETS & LARGE PHONES (Under 840px) */
+@media (max-width: 840px) {
+    /* 1. Navigation Fixes */
+    .nav-links-wrap {
+        display: none; /* Hidden until menu toggled */
+        flex-direction: column;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        background: #fff;
+        border-bottom: 5px solid #000;
+        padding: 20px 0;
+        z-index: 1000;
+    }
+
+    .site-nav.open .nav-links-wrap {
+        display: flex;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    /* 2. Header & Titles */
+    .sajj-logo-text {
+        font-size: 45px;
+    }
+
+    .pop-cursive {
+        font-size: 1.2rem;
+    }
+
+    /* 3. Slideshow Height Adjustment */
+    .img-placeholder-slot {
+        height: 350px !important;
+    }
+
+    .slide-caption {
+        font-size: 2rem !important;
+        bottom: 30px;
+    }
+}
+
+/* SMARTPHONES (Under 600px) */
+@media (max-width: 600px) {
+    /* 1. Header Spacing */
+    .reviews-header {
+        padding: 50px 15px;
+    }
+
+    /* 2. Review Grid: Switch to 1 column */
+    .reviews-container {
+        grid-template-columns: 1fr;
+        padding: 20px 5%;
+        gap: 20px;
+    }
+
+    /* 3. Product Lineup: Full width cards */
+    .sajj-flex-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .product-card {
+        width: 100% !important;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* 4. Performance Bars: Stack labels on top of bars */
+    .metric {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+        margin-bottom: 12px;
+    }
+
+    .bar-bg {
+        width: 100% !important;
+        height: 12px; /* Thicker for easier viewing on touch screens */
+    }
+
+    /* 5. Modal/Popup Adjustments */
+    .modal-content {
+        width: 95%;
+        margin: 20% auto;
+        padding: 20px;
+    }
+    
+    /* 6. Text and Pricing */
+    .product-title {
+        font-size: 1.2rem;
+    }
+    
+    .product-price {
+        font-size: 1.3rem;
+    }
+}
+
+/* SMALL PHONES (Under 380px) */
+@media (max-width: 380px) {
+    .sajj-logo-text {
+        font-size: 35px;
+    }
+    
+    .btn-main {
+        padding: 12px 25px;
+        font-size: 0.9rem;
+    }
+}
+/* Position the card correctly for the tag */
+.product-card {
+    position: relative;
+    overflow: visible; /* Allows the tag to 'pop' out the side */
+}
+
+/* The Producer's Choice Sticker */
+.producer-tag {
+    position: absolute;
+    top: 15px;
+    left: -15px; /* Makes it pop out to the left */
+    background: #00f5d4; /* Electric Teal */
+    color: #000;
+    padding: 8px 12px;
+    font-family: 'Titan One', sans-serif;
+    font-size: 11px;
+    border: 3px solid #000;
+    box-shadow: 4px 4px 0px #000;
+    z-index: 10;
+    transform: rotate(-8deg); /* The 'Pop Art' tilt */
+    text-transform: uppercase;
+}
+
+/* Scent Pyramid Box */
+.scent-pyramid {
+    background: #f8f9fa;
+    border-left: 4px solid #000;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+    text-align: left;
+}
+
+.note {
+    font-size: 0.75rem;
+    margin-bottom: 3px;
+}
+
+/* Progress Bars */
+.bar-bg {
+    width: 60%;
+    height: 10px;
+    background: #eee;
+    border: 2px solid #000;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.bar-fill {
+    height: 100%;
+    background: #f72585; /* Sajj Pink */
+}
+
+/* Zoom Effect */
+.product-img img {
+    width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;
+}
+.product-card:hover .product-img img {
+    transform: scale(1.1);
+}
+</style>
+
+<script>
+let slideIndex = 1;
+let autoPlay;
+
+showSlides(slideIndex);
+startAutoPlay();
+
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+  resetAutoPlay();
+}
+
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+  resetAutoPlay();
+}
+
+function showSlides(n) {
+  let i;
+  let slides = document.getElementsByClassName("mySlides");
+  let dots = document.getElementsByClassName("dot");
+  if (n > slides.length) {slideIndex = 1}    
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";  
+  }
+  for (i = 0; i < dots.length; i++) {
+    dots[i].className = dots[i].className.replace(" active", "");
+  }
+  if(slides[slideIndex-1]) {
+    slides[slideIndex-1].style.display = "block";  
+    dots[slideIndex-1].className += " active";
+  }
+}
+
+function startAutoPlay() {
+  autoPlay = setInterval(() => {
+    plusSlides(1);
+  }, 5000);
+}
+
+function resetAutoPlay() {
+  clearInterval(autoPlay);
+  startAutoPlay();
+}
+</script>
+    <div class="reviews-container">
+        <div class="review-card">
+            <div class="stars">★★★★★</div>
+            <p>"The best scent I have ever owned. It stays on my clothes for days!"</p>
+            <div class="customer-name">- CHIDI A.</div>
+        </div>
+
+        <div class="review-card" style="border-color: #72efdd;">
+            <div class="stars">★★★★★</div>
+            <p>"The packaging is so cool. It feels like a piece of art on my vanity."</p>
+            <div class="customer-name">- BOLU O.</div>
+        </div>
+
+        <div class="review-card">
+            <div class="stars">★★★★★</div>
+            <p>"Fast delivery and premium quality. SAJJ is my new favorite brand."</p>
+            <div class="customer-name">- FATIMA R.</div>
+        </div>
+    </div>
+
+    <section style="padding-bottom: 80px;">
+        <h3>Join the SAJJ Family</h3>
+        <button class="btn-main" id="openModalBtn">Leave a Review</button>
+    </section>
+
+    <div id="reviewModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModal">&times;</span>
+            <h2 style="font-family: 'Titan One'; margin: 0;">SAJJ</h2>
+            <p class="pop-cursive" style="color: #f72585;">Rate your experience</p>
+            
+            <form id="submit-review-form">
+                <input id="r-name" type="text" placeholder="Your Name" required>
+                <select id="r-rating">
+                    <option value="5">★★★★★ (Elite)</option>
+                    <option value="4">★★★★☆ (Great)</option>
+                    <option value="3">★★★☆☆ (Good)</option>
+                </select>
+                <textarea id="r-text" placeholder="Tell us about the scent..." rows="4" required></textarea>
+                <button type="submit" class="btn-main" style="width: 100%;">Post Review</button>
+            </form>
+        </div>
+    </div>
+
+    <section class="sajj-collection">
+    <h1 class="sajj-title">The Lineup</h1>
+    
+    <div class="sajj-flex-container">
+        <div class="product-card amber-theme">
+            <div class="product-badge">Soft Life</div>
+            <div class="longevity-badge">⏱️ 24h+</div>
+            <div class="product-img"><img src="2.png" alt="SAJJ Amber"></div>
+            <div class="product-info">
+                <h3 class="product-title">SAJJ Amber</h3>
+                <div class="scent-pyramid">
+                    <div class="note"><strong>Top:</strong> Bergamot, Pink Pepper</div>
+                    <div class="note"><strong>Heart:</strong> Amber, Vanilla</div>
+                    <div class="note"><strong>Base:</strong> Sandalwood</div>
+                </div>
+                <div class="performance-metrics">
+                    <div class="metric"><span>Longevity</span><div class="bar-bg"><div class="bar-fill" style="width: 75%;"></div></div></div>
+                    <div class="metric"><span>Sillage</span><div class="bar-bg"><div class="bar-fill" style="width: 60%;"></div></div></div>
+                </div>
+                <div class="product-price"><span class="currency">₦</span>3,000</div>
+            </div>
+        </div>
+
+        <div class="product-card dayyan-theme">
+            <div class="product-badge">Clean Steeze</div>
+            <div class="longevity-badge oud">⏱️ 48h+</div>
+            <div class="product-img"><img src="1.png" alt="SAJJ Dayyan"></div>
+            <div class="product-info">
+                <h3 class="product-title">SAJJ Dayyan</h3>
+                <div class="scent-pyramid">
+                    <div class="note"><strong>Top:</strong> Lemon, Sea Salt</div>
+                    <div class="note"><strong>Heart:</strong> Sage, Iris</div>
+                    <div class="note"><strong>Base:</strong> White Musk</div>
+                </div>
+                <div class="performance-metrics">
+                    <div class="metric"><span>Longevity</span><div class="bar-bg"><div class="bar-fill" style="width: 85%;"></div></div></div>
+                    <div class="metric"><span>Sillage</span><div class="bar-bg"><div class="bar-fill" style="width: 50%;"></div></div></div>
+                </div>
+                <div class="product-price"><span class="currency">₦</span>3,500</div>
+            </div>
+        </div>
+
+        <div class="product-card intense-theme">
+    <div class="producer-tag">🔥 Producer's Choice</div>
+    
+    <div class="product-badge">Main Character</div>
+    <div class="longevity-badge">⏱️ 24h+</div>
+    <div class="product-img"><img src="4.png" alt="SAJJ Intense"></div>
+    
+    <div class="product-info">
+        <h3 class="product-title">SAJJ Intense</h3>
+        
+        <div class="scent-pyramid">
+            <div class="note"><strong>Top:</strong> Coffee, Cardamom</div>
+            <div class="note"><strong>Heart:</strong> Praline, Jasmine</div>
+            <div class="note"><strong>Base:</strong> Cedarwood</div>
+        </div>
+
+        <div class="performance-metrics">
+            <div class="metric">
+                <span>Longevity</span>
+                <div class="bar-bg"><div class="bar-fill" style="width: 85%;"></div></div>
+            </div>
+            <div class="metric">
+                <span>Sillage</span>
+                <div class="bar-bg"><div class="bar-fill" style="width: 80%;"></div></div>
+            </div>
+        </div>
+        
+        <div class="product-price"><span class="currency">₦</span>4,000</div>
+        
+        <div class="product-actions" style="margin-top: 15px;">
+            <button class="btn btn-main" style="width: 100%;">🛒 Add to cart</button>
+        </div>
+    </div>
+</div>
+
+        <div class="product-card oud-theme">
+            <div class="product-badge">Boss Energy</div>
+            <div class="longevity-badge oud">⏱️ 48h+</div>
+            <div class="product-img"><img src="5.png" alt="Oud al SAJJ"></div>
+            <div class="product-info">
+                <h3 class="product-title">Oud al SAJJ</h3>
+                <div class="scent-pyramid">
+                    <div class="note"><strong>Top:</strong> Saffron, Nutmeg</div>
+                    <div class="note"><strong>Heart:</strong> Agarwood (Oud)</div>
+                    <div class="note"><strong>Base:</strong> Patchouli, Musk</div>
+                </div>
+                <div class="performance-metrics">
+                    <div class="metric"><span>Longevity</span><div class="bar-bg"><div class="bar-fill" style="width: 95%;"></div></div></div>
+                    <div class="metric"><span>Sillage</span><div class="bar-bg"><div class="bar-fill" style="width: 90%;"></div></div></div>
+                </div>
+                <div class="product-price"><span class="currency">₦</span>5,000</div>
+            </div>
+        </div>
+
+        <div class="product-card addictive-theme">
+            <div class="product-badge">Party Starter</div>
+            <div class="longevity-badge">⏱️ 24h+</div>
+            <div class="product-img"><img src="3.png" alt="SAJJ Addictive"></div>
+            <div class="product-info">
+                <h3 class="product-title">SAJJ Addictive</h3>
+                <div class="scent-pyramid">
+                    <div class="note"><strong>Top:</strong> Caramel, Peach</div>
+                    <div class="note"><strong>Heart:</strong> Tuberose, Honey</div>
+                    <div class="note"><strong>Base:</strong> Tonka Bean</div>
+                </div>
+                <div class="performance-metrics">
+                    <div class="metric"><span>Longevity</span><div class="bar-bg"><div class="bar-fill" style="width: 80%;"></div></div></div>
+                    <div class="metric"><span>Sillage</span><div class="bar-bg"><div class="bar-fill" style="width: 85%;"></div></div></div>
+                </div>
+                <div class="product-price"><span class="currency">₦</span>4,000</div>
+            </div>
+        </div>
+    </div>
+</section>
+    <script>
+        const modal = document.getElementById("reviewModal");
+        const btn = document.getElementById("openModalBtn");
+        const span = document.getElementById("closeModal");
+
+        // Open
+        btn.onclick = () => { modal.style.display = "block"; }
+        // Close
+        span.onclick = () => { modal.style.display = "none"; }
+        // Close on outside click
+        window.onclick = (event) => {
+            if (event.target == modal) { modal.style.display = "none"; }
+        }
+
+        // Load Reviews
+        async function loadReviews() {
+            try {
+                const res = await fetch('/api/reviews');
+                if (!res.ok) return;
+                const reviews = await res.json();
+                const container = document.querySelector('.reviews-container');
+
+                // Calculate Average
+                if (reviews.length > 0) {
+                    const total = reviews.reduce((acc, r) => acc + Number(r.rating), 0);
+                    const avg = (total / reviews.length).toFixed(1);
+                    const avgDisplay = document.getElementById('avg-rating-display');
+                    if (avgDisplay) {
+                        avgDisplay.innerHTML = `<span style="color:#ffbe0b; font-size:1.5rem; vertical-align:middle;">★</span> ${avg}/5 <span style="font-size:0.9rem; opacity:0.9;">(${reviews.length} verified reviews)</span>`;
+                    }
+                }
+                
+                // Append new reviews to the top
+                reviews.reverse().forEach(r => {
+                    const card = document.createElement('div');
+                    card.className = 'review-card';
+                    const stars = '★'.repeat(Number(r.rating)) + '☆'.repeat(5 - Number(r.rating));
+                    card.innerHTML = `
+                        <div class="stars">${stars}</div>
+                        <p>"${r.text.replace(/</g, '&lt;')}"</p>
+                        <div class="customer-name">- ${r.name.toUpperCase()}</div>
+                    `;
+                    container.prepend(card);
+                });
+            } catch(e) { console.error(e); }
+        }
+        loadReviews();
+
+        // Form Submit
+        document.getElementById('submit-review-form').onsubmit = async function(e) {
+            e.preventDefault();
+            const name = document.getElementById('r-name').value;
+            const rating = document.getElementById('r-rating').value;
+            const text = document.getElementById('r-text').value;
+
+            await fetch('/api/reviews', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ name, rating, text }) });
+            
+            alert("Thank you! Your review has been posted.");
+            window.location.reload();
+        }
+        
+        
+    </script>
+    <div class="quiz-button-container">
+    <a href="quiz.html" class="sajj-quiz-btn">
+        <span class="btn-icon">✨</span> FIND YOUR SCENT
+    </a>
+</div>
+   <footer>
+    <div style="padding: 20px; text-align: center; background: #f3f3f3; border-top: 5px solid #000; margin-top: 40px;">
+        <p>&copy; 2025 SAJJ Perfumes. All rights reserved.</p>
+        <p>
+            <a href="index.html" style="margin: 0 10px; text-decoration: none; color: #333;">Home</a> |
+            <a href="about.html" style="margin: 0 10px; text-decoration: none; color: #333;">About</a> |
+            <a href="review.html" style="margin: 0 10px; text-decoration: none; color: #333;">Reviews</a> |
+            <a href="contact.html" style="margin: 0 10px; text-decoration: none; color: #333;">Contact</a> |
+            <a href="shop.html" style="margin: 0 10px; text-decoration: none; color: #333;">Shop</a>
+        </p>
+    </div>
+   </footer>
+
+</body>
+</html>
