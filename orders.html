@@ -7,65 +7,136 @@
     <link rel="stylesheet" href="style.css">
     <style>
         body { background: #f4f4f4; padding: 20px; font-family: Arial, sans-serif; }
-        .admin-container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; vertical-align: top; }
-        th { background-color: #f8f9fa; font-weight: bold; }
-        tr:hover { background-color: #f9f9f9; }
-        .status-paid { color: green; font-weight: bold; background: #e6f4ea; padding: 4px 8px; border-radius: 4px; }
-        .status-pending { color: #b05c00; font-weight: bold; background: #fff4e5; padding: 4px 8px; border-radius: 4px; }
+        .admin-container { max-width: 1200px; margin: 0 auto; }
+        
+        /* Stats Cards */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .stat-card { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 5px solid #000; }
+        .stat-card h3 { margin: 0 0 5px 0; font-size: 14px; color: #666; text-transform: uppercase; }
+        .stat-card .val { font-size: 24px; font-weight: bold; color: #333; }
+
+        /* Main Content */
+        .content-box { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        
+        /* Header & Search */
+        .dash-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+        .search-box { padding: 10px; border: 1px solid #ddd; border-radius: 6px; width: 300px; max-width: 100%; }
+
+        /* Table Styles */
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 800px; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; vertical-align: top; }
+        th { background-color: #f8f9fa; font-weight: bold; color: #444; }
+        tr:hover { background-color: #fafafa; }
+
+        /* Badges & Buttons */
+        .badge { padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 11px; text-transform: uppercase; display: inline-block; }
+        .badge.paid { background: #d1fae5; color: #065f46; }
+        .badge.pending { background: #fef3c7; color: #92400e; }
+        .badge.delivered { background: #dbeafe; color: #1e40af; }
+        
+        .action-btn { cursor: pointer; padding: 6px 12px; border-radius: 4px; border: 1px solid #ddd; background: #fff; font-size: 12px; margin-right: 4px; transition: 0.2s; }
+        .action-btn:hover { background: #f0f0f0; border-color: #ccc; }
+        .action-btn.delete { color: #dc2626; border-color: #fecaca; }
+        .action-btn.delete:hover { background: #fef2f2; }
+
         .customer-info { line-height: 1.4; }
         .customer-info small { color: #666; display: block; margin-top: 4px; }
     </style>
 </head>
 <body>
     <div class="admin-container">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <h1>SAJJ Orders Dashboard</h1>
-            <a href="index.html" class="btn btn-ghost">Back to Site</a>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h1 style="margin:0; font-family:'Titan One', sans-serif;">SAJJ Admin</h1>
+            <a href="index.html" class="btn btn-ghost">Back to Shop</a>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card" style="border-color: #ff6b00;">
+                <h3>Total Revenue</h3>
+                <div class="val" id="stat-revenue">₦0.00</div>
+            </div>
+            <div class="stat-card" style="border-color: #00f5d4;">
+                <h3>Total Orders</h3>
+                <div class="val" id="stat-count">0</div>
+            </div>
+            <div class="stat-card" style="border-color: #f72585;">
+                <h3>Pending Payment</h3>
+                <div class="val" id="stat-pending">0</div>
+            </div>
         </div>
         
-        <div id="loading">Loading orders...</div>
-        
-        <table id="orders-table" style="display:none;">
-            <thead>
-                <tr>
-                    <th>Order ID / Date</th>
-                    <th>Customer Details</th>
-                    <th>Items Ordered</th>
-                    <th>Total</th>
-                    <th>Payment</th>
-                    <th>Notes</th>
-                </tr>
-            </thead>
-            <tbody id="orders-body"></tbody>
-        </table>
+        <div class="content-box">
+            <div class="dash-header">
+                <h2 style="margin:0;">Recent Orders</h2>
+                <input type="text" id="search-input" class="search-box" placeholder="Search name, email or Order ID...">
+            </div>
+
+            <div id="loading">Loading orders...</div>
+            
+            <div class="table-responsive">
+                <table id="orders-table" style="display:none;">
+                    <thead>
+                        <tr>
+                            <th>Order</th>
+                            <th>Customer</th>
+                            <th>Items</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orders-body"></tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <script>
+        let allOrders = [];
+
         async function loadOrders() {
             try {
-                // This request triggers the browser's built-in Login Popup because of the server's security
                 const res = await fetch('/api/orders');
-                
                 if (res.status === 401) {
                     alert("Access Denied. Please log in with admin credentials.");
                     window.location.reload();
                     return;
                 }
                 
-                const orders = await res.json();
+                allOrders = await res.json();
+                renderOrders(allOrders);
+                updateStats(allOrders);
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('orders-table').style.display = 'table';
-                
-                const tbody = document.getElementById('orders-body');
-                if (orders.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px;">No orders found yet.</td></tr>';
-                    return;
-                }
+            } catch (e) {
+                console.error(e);
+                document.getElementById('loading').textContent = "Error loading orders. Ensure server is running.";
+            }
+        }
 
-                tbody.innerHTML = orders.reverse().map(o => `
+        function updateStats(orders) {
+            const totalRev = orders.reduce((sum, o) => sum + Number(o.total || 0), 0);
+            const pending = orders.filter(o => !o.payment || !o.payment.paid).length;
+            
+            document.getElementById('stat-revenue').textContent = '₦' + totalRev.toLocaleString(undefined, {minimumFractionDigits:2});
+            document.getElementById('stat-count').textContent = orders.length;
+            document.getElementById('stat-pending').textContent = pending;
+        }
+
+        function renderOrders(orders) {
+            const tbody = document.getElementById('orders-body');
+            if (orders.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px;">No orders found.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = orders.slice().reverse().map(o => {
+                const isPaid = o.payment && o.payment.paid;
+                const isDelivered = o.payment && o.payment.delivered;
+                
+                return `
                     <tr>
                         <td>
                             <strong>${o.id}</strong><br>
@@ -82,18 +153,58 @@
                         </td>
                         <td><strong>₦${Number(o.total).toFixed(2)}</strong></td>
                         <td>
-                            <div style="margin-bottom:5px;">${o.payment.method === 'cod' ? 'Cash on Delivery' : 'Bank Transfer'}</div>
-                            ${o.payment.paid ? '<span class="status-paid">PAID</span>' : '<span class="status-pending">PENDING</span>'}
-                            ${o.payment.reference ? `<br><small>Ref: ${o.payment.reference}</small>` : ''}
+                            <div style="margin-bottom:5px;">${(o.payment.method || 'N/A').toUpperCase()}</div>
+                            ${isPaid ? '<span class="badge paid">PAID</span>' : '<span class="badge pending">PENDING</span>'}
+                            ${isDelivered ? '<span class="badge delivered">DELIVERED</span>' : ''}
+                            ${o.notes ? `<br><small style="color:red">Note: ${o.notes}</small>` : ''}
                         </td>
-                        <td style="color:#555; font-style:italic;">${o.notes || '-'}</td>
+                        <td>
+                            <button class="action-btn" onclick="toggleStatus('${o.id}', 'paid')">${isPaid ? 'Mark Unpaid' : 'Mark Paid'}</button>
+                            <button class="action-btn" onclick="toggleStatus('${o.id}', 'delivered')">${isDelivered ? 'Undeliver' : 'Mark Delivered'}</button>
+                            <button class="action-btn delete" onclick="deleteOrder('${o.id}')">Delete</button>
+                        </td>
                     </tr>
-                `).join('');
-            } catch (e) {
-                console.error(e);
-                document.getElementById('loading').textContent = "Error loading orders. Ensure server is running.";
-            }
+                `;
+            }).join('');
         }
+
+        // Search Filter
+        document.getElementById('search-input').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = allOrders.filter(o => 
+                o.id.toLowerCase().includes(term) || 
+                o.customer.name.toLowerCase().includes(term) ||
+                o.customer.email.toLowerCase().includes(term)
+            );
+            renderOrders(filtered);
+        });
+
+        // Actions
+        async function toggleStatus(id, field) {
+            const order = allOrders.find(o => o.id === id);
+            if (!order) return;
+            
+            const currentVal = order.payment ? order.payment[field] : false;
+            const updatedPayment = { ...order.payment, [field]: !currentVal };
+
+            try {
+                const res = await fetch('/api/orders/' + id, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ payment: updatedPayment })
+                });
+                if (res.ok) loadOrders();
+            } catch(e) { alert('Error updating order'); }
+        }
+
+        async function deleteOrder(id) {
+            if (!confirm('Are you sure you want to delete this order? This cannot be undone.')) return;
+            try {
+                const res = await fetch('/api/orders/' + id, { method: 'DELETE' });
+                if (res.ok) loadOrders();
+            } catch(e) { alert('Error deleting order'); }
+        }
+
         loadOrders();
     </script>
 </body>
